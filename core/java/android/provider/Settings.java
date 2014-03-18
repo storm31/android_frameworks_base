@@ -3476,12 +3476,6 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
-         * Setting to force show navigation bar.
-         * @hide
-         */
-        public static final String SHOW_NAVIGATION = "show_navigation";
-
-        /**
          * @hide
          */
         public static final String DUAL_PANE_PREFS = "dual_pane_prefs";
