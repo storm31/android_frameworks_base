@@ -52,9 +52,11 @@ public class SignalClusterView
     private boolean mIsAirplaneMode = false;
     private int mAirplaneIconId = 0;
     private String mWifiDescription, mMobileDescription, mMobileTypeDescription;
+    private boolean mEthernetVisible = false;
+    private int mEthernetIconId = 0;
 
     ViewGroup mWifiGroup, mMobileGroup;
-    ImageView mWifi, mMobile, mMobileType, mAirplane, mNoSimSlot;
+    ImageView mWifi, mMobile, mMobileType, mAirplane, mNoSimSlot, mEthernet;
     View mSpacer;
 
     public SignalClusterView(Context context) {
@@ -86,6 +88,7 @@ public class SignalClusterView
         mNoSimSlot      = (ImageView) findViewById(R.id.no_sim);
         mSpacer         =             findViewById(R.id.spacer);
         mAirplane       = (ImageView) findViewById(R.id.airplane);
+        mEthernet       = (ImageView) findViewById(R.id.ethernet);
 
         apply();
     }
@@ -100,6 +103,7 @@ public class SignalClusterView
         mNoSimSlot      = null;
         mSpacer         = null;
         mAirplane       = null;
+        mEthernet       = null;
 
         super.onDetachedFromWindow();
     }
@@ -136,6 +140,16 @@ public class SignalClusterView
     }
 
     @Override
+    public void setEthernetIndicators(boolean visible, int ethernetIcon,
+            String contentDescription) {
+        mEthernetVisible = visible;
+        mEthernetIconId = ethernetIcon;
+        mEthernetDescription = contentDescription;
+
+        apply();
+    }
+
+    @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
         // Standard group layout onPopulateAccessibilityEvent() implementations
         // ignore content description, so populate manually
@@ -164,6 +178,10 @@ public class SignalClusterView
 
         if(mAirplane != null) {
             mAirplane.setImageDrawable(null);
+        }
+
+        if(mEthernet != null) {
+            mEthernet.setImageDrawable(null);
         }
 
         apply();
@@ -210,6 +228,14 @@ public class SignalClusterView
             mSpacer.setVisibility(View.INVISIBLE);
         } else {
             mSpacer.setVisibility(View.GONE);
+        }
+
+        if (mEthernetVisible) {
+            mEthernet.setVisibility(View.VISIBLE);
+            mEthernet.setImageResource(mEthernetIconId);
+            mEthernet.setContentDescription(mEthernetDescription);
+        } else {
+            mEthernet.setVisibility(View.GONE);
         }
 
         if (DEBUG) Log.d(TAG,
