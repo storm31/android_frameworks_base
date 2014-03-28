@@ -1185,13 +1185,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 combinedSignalIconId = mDataSignalIconId;
                 switch (mDataActivity) {
                     case TelephonyManager.DATA_ACTIVITY_IN:
-                        mMobileActivityIconId = 0;
+                        mMobileActivityIconId = R.drawable.stat_sys_signal_in;
                         break;
                     case TelephonyManager.DATA_ACTIVITY_OUT:
-                        mMobileActivityIconId = 0;
+                        mMobileActivityIconId = R.drawable.stat_sys_signal_out;
                         break;
                     case TelephonyManager.DATA_ACTIVITY_INOUT:
-                        mMobileActivityIconId = 0;
+                        mMobileActivityIconId = R.drawable.stat_sys_signal_inout;
                         break;
                     default:
                         mMobileActivityIconId = R.drawable.stat_sys_signal_noinout;
@@ -1218,13 +1218,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 }
                 switch (mWifiActivity) {
                     case WifiManager.DATA_ACTIVITY_IN:
-                        mWifiActivityIconId = 0;
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
                         break;
                     case WifiManager.DATA_ACTIVITY_OUT:
-                        mWifiActivityIconId = 0;
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
                         break;
                     case WifiManager.DATA_ACTIVITY_INOUT:
-                        mWifiActivityIconId = 0;
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
                         break;
                     case WifiManager.DATA_ACTIVITY_NONE:
                         mWifiActivityIconId = R.drawable.stat_sys_wifi_noinout;
