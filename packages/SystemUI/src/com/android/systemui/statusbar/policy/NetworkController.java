@@ -182,9 +182,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     private UpdateUIListener mUpdateUIListener = null;
 
     public interface SignalCluster {
-        void setWifiIndicators(boolean visible, int strengthIcon,
+        void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
                 String contentDescription);
-        void setMobileDataIndicators(boolean visible, int strengthIcon,
+        void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
                 int typeIcon, String contentDescription, String typeContentDescription,
                 int noSimIcon);
         void setIsAirplaneMode(boolean is, int airplaneIcon);
@@ -369,6 +369,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 // only show wifi in the cluster if connected or if wifi-only
                 mWifiEnabled && (mWifiConnected || !mHasMobileDataFeature),
                 mWifiIconId,
+                mWifiActivityIconId,
                 mContentDescriptionWifi);
 
         cluster.setEthernetIndicators(
@@ -382,6 +383,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             cluster.setMobileDataIndicators(
                     true,
                     mAlwaysShowCdmaRssi ? mPhoneSignalIconId : mWimaxIconId,
+                    mMobileActivityIconId,
                     mDataTypeIconId,
                     mContentDescriptionWimax,
                     mContentDescriptionDataType,
@@ -391,6 +393,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             cluster.setMobileDataIndicators(
                     mHasMobileDataFeature,
                     mShowPhoneRSSIForData ? mPhoneSignalIconId : mDataSignalIconId,
+                    mMobileActivityIconId,
                     mDataTypeIconId,
                     mContentDescriptionPhoneSignal,
                     mContentDescriptionDataType,
@@ -1741,6 +1744,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     cluster.setWifiIndicators(
                             show,
                             iconId,
+                            mWifiActivityIconId,
                             "Demo");
                 }
             }
@@ -1773,6 +1777,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                     cluster.setMobileDataIndicators(
                             show,
                             iconId,
+                            mMobileActivityIconId,
                             mDemoDataTypeIconId,
                             "Demo",
                             "Demo",
