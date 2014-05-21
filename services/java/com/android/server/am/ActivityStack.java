@@ -71,15 +71,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
-import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
 import android.view.Display;
-import com.android.internal.app.ActivityTrigger;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -258,16 +254,7 @@ final class ActivityStack {
 
     final Handler mHandler;
 
-    static final ActivityTrigger mActivityTrigger;
     private final PowerManagerService mPowerManager;
-
-    static {
-        if (!TextUtils.isEmpty(SystemProperties.get("ro.vendor.extension_library"))) {
-            mActivityTrigger = new ActivityTrigger();
-        } else {
-            mActivityTrigger = null;
-        }
-    }
 
     final class ActivityStackHandler extends Handler {
         //public Handler() {
@@ -716,16 +703,10 @@ final class ActivityStack {
         int w = mThumbnailWidth;
         int h = mThumbnailHeight;
         if (w < 0) {
-            boolean largeThumbs = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.LARGE_RECENT_THUMBS, 0, UserHandle.USER_CURRENT) == 1;
             mThumbnailWidth = w =
-                    res.getDimensionPixelSize(
-                    com.android.internal.R.dimen.thumbnail_width);
-            if (largeThumbs) mThumbnailWidth = w = mThumbnailWidth * 2;
-            int height = res.getDisplayMetrics().heightPixels;
-            int width = res.getDisplayMetrics().widthPixels;
-            mThumbnailHeight = h = (height > width ? width : height) * mThumbnailWidth /
-                    (height > width ? height : width);
+                res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_width);
+            mThumbnailHeight = h =
+                res.getDimensionPixelSize(com.android.internal.R.dimen.thumbnail_height);
         }
 
         if (w > 0) {
@@ -1370,10 +1351,6 @@ final class ActivityStack {
 
         if (DEBUG_SWITCH) Slog.v(TAG, "Resuming " + next);
 
-		if (mActivityTrigger != null) {
-            mActivityTrigger.activityResumeTrigger(next.intent);
-        }
-		
         // Some activities may want to alter the system power management
         mPowerManager.activityResumed(next.intent);
 
@@ -1807,9 +1784,6 @@ final class ActivityStack {
 
         r.putInHistory();
         r.frontOfTask = newTask;
-        if (mActivityTrigger != null) {
-            mActivityTrigger.activityStartTrigger(r.intent);
-        }
         if (!isHomeStack() || numActivities() > 0) {
             // We want to show the starting preview window if we are
             // switching to a new task, or the next activity's process is
