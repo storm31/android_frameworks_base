@@ -48,6 +48,7 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.ThemesContract;
 import android.text.TextUtils;
@@ -75,6 +76,7 @@ import java.util.List;
  */
 public class ThemeService extends IThemeService.Stub {
     private static final String TAG = ThemeService.class.getName();
+    private static final int DELAY_APPLY_DEFAULT_THEME = 1000;
 
     private HandlerThread mWorker;
     private ThemeWorkerHandler mHandler;
@@ -461,7 +463,8 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (success) {
-            mContext.sendBroadcast(new Intent(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED));
+            mContext.sendBroadcastAsUser(new Intent(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
+                    UserHandle.ALL);
         }
         return success;
     }
@@ -639,7 +642,8 @@ public class ThemeService extends IThemeService.Stub {
 
         // if successful, broadcast that the theme changed
         if (isSuccess) {
-            mContext.sendBroadcast(new Intent(ThemeUtils.ACTION_THEME_CHANGED));
+            mContext.sendBroadcastAsUser(new Intent(ThemeUtils.ACTION_THEME_CHANGED),
+                    UserHandle.ALL);
         }
     }
 
@@ -681,7 +685,7 @@ public class ThemeService extends IThemeService.Stub {
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
         Message msg = Message.obtain();
         msg.what = ThemeWorkerHandler.MESSAGE_APPLY_DEFAULT_THEME;
-        mHandler.sendMessage(msg);
+        mHandler.sendMessageDelayed(msg, DELAY_APPLY_DEFAULT_THEME);
     }
 
     @Override
