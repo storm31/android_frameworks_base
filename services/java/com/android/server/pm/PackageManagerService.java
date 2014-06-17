@@ -5441,7 +5441,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             int actualHashCode = getPackageHashCode(pkg);
             return storedHashCode != actualHashCode;
         } catch(IOException e) {
-            Log.e(TAG, "Could not read hash for " + pkg + "not compiling icon pack", e);
+            // all is good enough for government work here,
+            // we'll just return true and the icons will be processed
         } finally {
             IoUtils.closeQuietly(in);
             IoUtils.closeQuietly(dataInput);
@@ -6418,8 +6419,20 @@ public class PackageManagerService extends IPackageManager.Stub {
                 int userId) {
             if (!sUserManager.exists(userId)) return null;
             mFlags = flags;
-            return super.queryIntent(intent, resolvedType,
+            List<ResolveInfo> list = super.queryIntent(intent, resolvedType,
                     (flags & PackageManager.MATCH_DEFAULT_ONLY) != 0, userId);
+
+            // Remove protected Application components
+            if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+                Iterator<ResolveInfo> itr = list.iterator();
+                while (itr.hasNext()) {
+                    if (itr.next().activityInfo.applicationInfo.protect) {
+                        itr.remove();
+                    }
+                }
+            }
+
+            return list;
         }
 
         public List<ResolveInfo> queryIntentForPackage(Intent intent, String resolvedType,
@@ -10451,10 +10464,12 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         //Cleanup theme related data
-        if (ps.pkg.mOverlayTargets.size() > 0) {
-            uninstallThemeForAllApps(ps.pkg);
-        } else if (mOverlays.containsKey(ps.pkg.packageName)) {
-            uninstallThemeForApp(ps.pkg);
+        if (ps.pkg != null) {
+            if (ps.pkg.mOverlayTargets.size() > 0) {
+                uninstallThemeForAllApps(ps.pkg);
+            } else if (mOverlays.containsKey(ps.pkg.packageName)) {
+                uninstallThemeForApp(ps.pkg);
+            }
         }
 
         return ret;
