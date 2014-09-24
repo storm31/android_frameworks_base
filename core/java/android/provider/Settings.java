@@ -3635,11 +3635,6 @@ public final class Settings {
          * @hide
          */
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
-
-        /**
-         * @hide
-         */
-        public static final String DUAL_PANE_PREFS = "dual_pane_prefs";
         
         /**
          * Whether to enable voice wakeup.  The value is boolean (1 or 0).
