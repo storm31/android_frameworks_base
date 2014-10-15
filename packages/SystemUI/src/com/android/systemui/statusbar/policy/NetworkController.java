@@ -140,13 +140,13 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
     protected boolean mAirplaneMode = false;
     protected boolean mLastAirplaneMode = true;
 
-    private Locale mLocale = null;
-    private Locale mLastLocale = null;
+    protected Locale mLocale = null;
+    protected Locale mLastLocale = null;
 
     //ethernet
     private boolean mEthernetConnected = false;
-    private int mEthernetIconId = 0;
-    private int mLastEthernetIconId = 0;
+    protected int mEthernetIconId = 0;
+    protected int mLastEthernetIconId = 0;
 
     // our ui
     protected Context mContext;
@@ -179,7 +179,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
 
     boolean mDataAndWifiStacked = false;
 
-    private UpdateUIListener mUpdateUIListener = null;
+    protected UpdateUIListener mUpdateUIListener = null;
 
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
@@ -569,7 +569,9 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         else if (IccCardConstants.INTENT_VALUE_ICC_CARD_IO_ERROR.equals(stateExtra)) {
             mSimState = IccCardConstants.State.CARD_IO_ERROR;
         }
-        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
+        else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)
+                || IccCardConstants.INTENT_VALUE_ICC_IMSI.equals(stateExtra)
+                || IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(stateExtra)) {
             mSimState = IccCardConstants.State.READY;
         }
         else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
