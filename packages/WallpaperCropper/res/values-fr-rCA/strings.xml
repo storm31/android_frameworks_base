@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="crop_wallpaper">Divar kağızını kəs</string>
-  <string name="wallpaper_instructions">Divar kağızını tənzimlə</string>
-  <string name="wallpaper_load_fail">Təsvir divar kağızı kimi yüklənə bilmədi</string>
+  <string name="crop_wallpaper">Recadrer le fond d\'écran</string>
+  <string name="wallpaper_instructions">Appliquer le fond d\'écran</string>
+  <string name="wallpaper_load_fail">Impossible de charger l\'image comme fond d\'écran</string>
 </resources>
